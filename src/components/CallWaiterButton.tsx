@@ -4,17 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { venue } from "@/data/menu";
 
 const TABLE_KEY = "2bg-table";
 
-const buildWhatsAppLink = (table: string, message: string) => {
+const buildWhatsAppLink = (whatsapp: string, table: string, message: string) => {
   const tableNote = table ? ` (Table ${table})` : "";
   const text = encodeURIComponent(`Hi 2nd Baze Garden${tableNote} — ${message}`);
-  return `https://wa.me/${venue.whatsapp}?text=${text}`;
+  return `https://wa.me/${whatsapp}?text=${text}`;
 };
 
-export const CallWaiterButton = () => {
+export const CallWaiterButton = ({ whatsapp }: { whatsapp: string }) => {
   const [open, setOpen] = useState(false);
   const [table, setTable] = useState("");
 
@@ -72,7 +71,7 @@ export const CallWaiterButton = () => {
           {actions.map(({ icon: Icon, label, message }) => (
             <a
               key={label}
-              href={buildWhatsAppLink(table, message)}
+              href={buildWhatsAppLink(whatsapp, table, message)}
               target="_blank"
               rel="noreferrer"
               onClick={() => setOpen(false)}
@@ -86,11 +85,7 @@ export const CallWaiterButton = () => {
           ))}
         </div>
 
-        <Button
-          variant="ghost"
-          className="mt-3 w-full"
-          onClick={() => setOpen(false)}
-        >
+        <Button variant="ghost" className="mt-3 w-full" onClick={() => setOpen(false)}>
           <X className="h-4 w-4" /> Cancel
         </Button>
       </SheetContent>

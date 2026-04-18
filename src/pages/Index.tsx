@@ -5,21 +5,20 @@ import { Hero } from "@/components/Hero";
 import { MenuSection } from "@/components/MenuSection";
 import { Services } from "@/components/Services";
 import { Social } from "@/components/Social";
-import { venue } from "@/data/menu";
+import { useCategories, useMenuItems, useServices, useSettings } from "@/hooks/useVenueData";
 
 const Index = () => {
+  const { data: settings } = useSettings();
+  const { data: categories } = useCategories();
+  const { data: items } = useMenuItems();
+  const { data: services } = useServices();
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Restaurant",
-    name: venue.name,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "20 DBS Road, Off Okpanam Road",
-      addressLocality: "Asaba",
-      addressRegion: "Delta",
-      addressCountry: "NG",
-    },
-    telephone: venue.phone,
+    name: settings?.venue_name || "2nd Baze Garden",
+    address: settings?.address,
+    telephone: settings?.phone,
     openingHours: "Mo-Su 00:00-23:59",
     servesCuisine: ["Nigerian", "Bar & Grill"],
     priceRange: "₦₦",
@@ -27,13 +26,13 @@ const Index = () => {
 
   return (
     <main>
-      <Hero />
-      <About />
-      <MenuSection />
-      <Services />
-      <Social />
-      <Footer />
-      <CallWaiterButton />
+      <Hero settings={settings} />
+      <About settings={settings} />
+      <MenuSection categories={categories} items={items} />
+      <Services services={services} settings={settings} />
+      <Social settings={settings} />
+      <Footer settings={settings} />
+      <CallWaiterButton whatsapp={settings?.whatsapp || ""} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     </main>
   );

@@ -1,6 +1,6 @@
 import { Facebook, Instagram, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { venue } from "@/data/menu";
+import type { Settings } from "@/hooks/useVenueData";
 
 const TikTokIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
@@ -8,40 +8,36 @@ const TikTokIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export const Social = () => (
+export const Social = ({ settings }: { settings: Settings | null }) => (
   <section id="social" className="bg-primary py-12 text-primary-foreground md:py-20">
     <div className="container max-w-3xl text-center">
       <p className="text-sm font-semibold uppercase tracking-widest text-accent">Stay connected</p>
-      <h2 className="mt-2 font-display text-3xl font-bold md:text-5xl">
-        Follow the vibe online
-      </h2>
+      <h2 className="mt-2 font-display text-3xl font-bold md:text-5xl">Follow the vibe online</h2>
       <p className="mx-auto mt-3 max-w-lg text-primary-foreground/80">
         See what's cooking, peek at upcoming events, and tag us when you visit.
       </p>
 
       <div className="mt-7 flex flex-wrap justify-center gap-3">
-        <SocialBtn href={venue.socials.instagram} label="Instagram">
-          <Instagram className="h-5 w-5" />
-        </SocialBtn>
-        <SocialBtn href={venue.socials.facebook} label="Facebook">
-          <Facebook className="h-5 w-5" />
-        </SocialBtn>
-        <SocialBtn href={venue.socials.tiktok} label="TikTok">
-          <TikTokIcon className="h-5 w-5" />
-        </SocialBtn>
+        {settings?.instagram && (
+          <SocialBtn href={settings.instagram} label="Instagram"><Instagram className="h-5 w-5" /></SocialBtn>
+        )}
+        {settings?.facebook && (
+          <SocialBtn href={settings.facebook} label="Facebook"><Facebook className="h-5 w-5" /></SocialBtn>
+        )}
+        {settings?.tiktok && (
+          <SocialBtn href={settings.tiktok} label="TikTok"><TikTokIcon className="h-5 w-5" /></SocialBtn>
+        )}
       </div>
 
-      <div className="mt-8">
-        <Button
-          asChild
-          size="lg"
-          className="h-12 rounded-full bg-accent px-7 text-accent-foreground hover:bg-accent-glow"
-        >
-          <a href={venue.reviewLink} target="_blank" rel="noreferrer">
-            <Star className="h-4 w-4" /> Leave a Google Review
-          </a>
-        </Button>
-      </div>
+      {settings?.review_link && (
+        <div className="mt-8">
+          <Button asChild size="lg" className="h-12 rounded-full bg-accent px-7 text-accent-foreground hover:bg-accent-glow">
+            <a href={settings.review_link} target="_blank" rel="noreferrer">
+              <Star className="h-4 w-4" /> Leave a Google Review
+            </a>
+          </Button>
+        </div>
+      )}
     </div>
   </section>
 );
